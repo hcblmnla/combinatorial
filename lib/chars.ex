@@ -11,6 +11,11 @@ defmodule Chars do
     end
   end
 
+  def not_in_string?(string) when is_bitstring(string) do
+    predicate = in_string?(string)
+    fn code -> !predicate.(code) end
+  end
+
   def parse_integer(string) when is_bitstring(string) do
     case Integer.parse(string) do
       {integer, _} -> integer

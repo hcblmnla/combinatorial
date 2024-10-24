@@ -108,4 +108,6 @@ defmodule Combinators do
   def many(parser), do: concat(&[&1 | &2], parser, any(parser))
 
   def str(parser), do: map(&Enum.join/1, parser)
+
+  # TODO: word
 end
