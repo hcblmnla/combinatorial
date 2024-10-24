@@ -5,6 +5,15 @@ defmodule Primitives do
 
   def chars(string), do: Chars.in_string?(string) |> char()
 
+  def word(source) do
+    sequence(
+      String.codepoints(source)
+      |> Enum.map(fn code ->
+        char(fn c -> <<c>> == code end)
+      end)
+    )
+  end
+
   def not_chars(string), do: Chars.not_in_string?(string) |> char()
 
   def space(), do: char(&Chars.is_whitespace?/1)
@@ -55,5 +64,17 @@ defmodule Primitives do
     ])
   end
 
-  # TODO: letter, letter_or_digit, identifier, null
+  def letter(), do: char(&Chars.is_letter?/1)
+
+  def letter_or_digit(), do: char(&Chars.is_letter_or_digit/1)
+
+  def identifier() do
+    sequence([
+      letter(),
+      letter_or_digit() |> any()
+    ])
+    |> str()
+  end
+
+  def null(), do: map(fn _ -> nil end, word("null"))
 end
